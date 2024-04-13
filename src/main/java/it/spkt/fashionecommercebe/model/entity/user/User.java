@@ -85,9 +85,9 @@ public class User implements UserDetails {
     private List<Address> addressList;
 
     @JsonManagedReference
-    @OneToMany(mappedBy="user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToOne(mappedBy="user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Shop> shopList;
+    private Shop shop;
 
     @JsonManagedReference
     @OneToMany(mappedBy="user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)

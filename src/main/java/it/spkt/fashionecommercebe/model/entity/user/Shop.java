@@ -43,7 +43,7 @@ public class Shop {
     private StatusEnum status;
 
     @JsonBackReference
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "userId",nullable = false)
     private User user;
 
