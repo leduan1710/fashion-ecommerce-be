@@ -1,14 +1,17 @@
-package it.spkt.fashionecommercebe.model.entity.Category;
+package it.spkt.fashionecommercebe.model.entity.category;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import it.spkt.fashionecommercebe.model.entity.Product.Product;
-import it.spkt.fashionecommercebe.model.entity.User.Shop;
+import it.spkt.fashionecommercebe.model.entity.product.Product;
+
 import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -30,7 +33,7 @@ public class Brand {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "categoryId",nullable = false)
+    @JoinColumn(name = "categoryId")
     private Category category;
 
     @JsonManagedReference

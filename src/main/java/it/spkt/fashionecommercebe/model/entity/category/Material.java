@@ -1,12 +1,15 @@
-package it.spkt.fashionecommercebe.model.entity.Product;
+package it.spkt.fashionecommercebe.model.entity.category;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import it.spkt.fashionecommercebe.model.entity.product.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -15,19 +18,21 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ProductOption")
-public class ProductOption {
+@Table(name = "Material")
+public class Material {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column(nullable = false,columnDefinition = "nvarchar(100)")
     private String name;
+
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "productId",nullable = false)
-    private Product product;
+    @JoinColumn(name = "categoryId",nullable = false)
+    private Category category;
 
     @JsonManagedReference
-    @OneToMany(mappedBy="productOption",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<ProductOptionDetail> productOptionDetailList;
+    @OneToMany(mappedBy="material",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Product> productList;
 }

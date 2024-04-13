@@ -1,15 +1,18 @@
-package it.spkt.fashionecommercebe.model.entity.User;
+package it.spkt.fashionecommercebe.model.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import it.spkt.fashionecommercebe.model.entity.Order.Orders;
-import it.spkt.fashionecommercebe.model.entity.Product.Product;
-import it.spkt.fashionecommercebe.model.entity.Voucher.Voucher;
+import it.spkt.fashionecommercebe.common.StatusEnum;
+import it.spkt.fashionecommercebe.model.entity.order.Orders;
+import it.spkt.fashionecommercebe.model.entity.product.Product;
+import it.spkt.fashionecommercebe.model.entity.voucher.Voucher;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
 import java.util.List;
@@ -36,7 +39,8 @@ public class Shop {
     @Column(nullable = false)
     private Date updateDate;
     @Column(nullable = false)
-    private Boolean status;
+    @Enumerated(EnumType.STRING)
+    private StatusEnum status;
 
     @JsonBackReference
     @ManyToOne
@@ -45,16 +49,23 @@ public class Shop {
 
     @JsonManagedReference
     @OneToMany(mappedBy="shop",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Product> productList;
 
     @JsonManagedReference
     @OneToMany(mappedBy="shop",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Orders> orders;
 
 
     @JsonManagedReference
     @OneToMany(mappedBy="shop",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Voucher> voucherList;
+
+    @ManyToMany(mappedBy = "shopFollowList", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<User> userList;
 
 
 }

@@ -1,17 +1,24 @@
-package it.spkt.fashionecommercebe.model.entity.Product;
+package it.spkt.fashionecommercebe.model.entity.product;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import it.spkt.fashionecommercebe.model.entity.Category.*;
-import it.spkt.fashionecommercebe.model.entity.User.Shop;
-import it.spkt.fashionecommercebe.model.entity.Voucher.Voucher;
+import it.spkt.fashionecommercebe.common.StatusEnum;
+import it.spkt.fashionecommercebe.model.entity.category.*;
+import it.spkt.fashionecommercebe.model.entity.report.ReportProduct;
+import it.spkt.fashionecommercebe.model.entity.review.ImageReview;
+import it.spkt.fashionecommercebe.model.entity.review.Review;
+import it.spkt.fashionecommercebe.model.entity.user.Shop;
+import it.spkt.fashionecommercebe.model.entity.user.User;
+import it.spkt.fashionecommercebe.model.entity.voucher.Voucher;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Check;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
 import java.util.List;
@@ -30,7 +37,8 @@ public class Product {
     @Column(nullable = false,columnDefinition = "nvarchar(100)")
     private String name;
     @Column(nullable = false)
-    private Boolean status;
+    @Enumerated(EnumType.STRING)
+    private StatusEnum status;
     @Column(nullable = true,columnDefinition = "nvarchar(100)")
     private String brandOther;
     @Column(nullable = true,columnDefinition = "nvarchar(100)")
@@ -71,20 +79,38 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "originId")
     private Origin origin;
+
     @JsonManagedReference
     @OneToMany(mappedBy="product",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<ProductDetail> productDetailList;
 
     @JsonManagedReference
     @OneToMany(mappedBy="product",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<ImageProduct> imageProductList;
 
     @JsonManagedReference
     @OneToMany(mappedBy="product",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<ProductOption> productOptionList;
 
     @JsonManagedReference
     @OneToMany(mappedBy="product",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Review> reviewList;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy="product",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Voucher> voucherList;
+    @JsonManagedReference
+    @OneToMany(mappedBy="product",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<ReportProduct> reportProductList;
+
+    @ManyToMany(mappedBy = "productList", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<User> userList;
 
 }

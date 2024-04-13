@@ -1,4 +1,4 @@
-package it.spkt.fashionecommercebe.model.entity.User;
+package it.spkt.fashionecommercebe.model.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import it.spkt.fashionecommercebe.common.AddressEnum;

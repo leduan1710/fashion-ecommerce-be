@@ -1,14 +1,17 @@
-package it.spkt.fashionecommercebe.model.entity.Product;
+package it.spkt.fashionecommercebe.model.entity.product;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import it.spkt.fashionecommercebe.model.entity.Order.OrderDetail;
+import it.spkt.fashionecommercebe.model.entity.Discount;
+import it.spkt.fashionecommercebe.model.entity.order.OrderDetail;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Check;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -37,7 +40,7 @@ public class ProductDetail {
     @JoinColumn(name = "productId",nullable = false)
     private Product product;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(
             joinColumns = @JoinColumn(name = "id_product_detail"),
             inverseJoinColumns = @JoinColumn(name = "id_product_option_detail"),
@@ -46,5 +49,11 @@ public class ProductDetail {
 
     @JsonManagedReference
     @OneToMany(mappedBy="productDetail",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<OrderDetail> orderDetails;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy="productDetail",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Discount> discountList;
 }

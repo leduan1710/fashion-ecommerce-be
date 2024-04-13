@@ -1,19 +1,20 @@
-package it.spkt.fashionecommercebe.model.entity.Voucher;
+package it.spkt.fashionecommercebe.model.entity.voucher;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import it.spkt.fashionecommercebe.model.entity.Order.Orders;
-import it.spkt.fashionecommercebe.model.entity.Product.Product;
-import it.spkt.fashionecommercebe.model.entity.Product.ProductOptionDetail;
-import it.spkt.fashionecommercebe.model.entity.User.Shop;
-import it.spkt.fashionecommercebe.model.entity.User.User;
+import it.spkt.fashionecommercebe.common.NameConditionVoucherEnum;
+import it.spkt.fashionecommercebe.model.entity.order.Orders;
+import it.spkt.fashionecommercebe.model.entity.product.Product;
+import it.spkt.fashionecommercebe.model.entity.user.Shop;
+import it.spkt.fashionecommercebe.model.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Check;
-import org.hibernate.annotations.Columns;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
 import java.util.List;
@@ -24,18 +25,24 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Check(constraints = "quantity >= 0")
-@Check(constraints = "decrease >= 0")
+@Check(constraints = "decrease_voucher >= 0")
+@Check(constraints = "percent_voucher >= 0")
 @Table(name = "Voucher")
 public class Voucher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false,columnDefinition = "nvarchar(100)")
-    private String code;
+    private String codeVoucher;
     @Column(nullable = false)
-    private String condition;
+    @Enumerated(EnumType.STRING)
+    private NameConditionVoucherEnum nameConditionVoucher;
     @Column(nullable = false)
-    private long decrease;
+    private long quantityOrPriceCondition;
+    @Column(nullable = true)
+    private long decreaseVoucher;
+    @Column(nullable = true)
+    private double percentVoucher;
     @Column(nullable = false)
     private int quantity;
     @Column(nullable = false)
@@ -43,7 +50,7 @@ public class Voucher {
     @Column(nullable = false)
     private Date updateDate;
     @Column(nullable = false)
-    private Date expiry;
+    private Date expiryVoucher;
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "shopId")
@@ -57,11 +64,8 @@ public class Voucher {
     @JsonManagedReference
     @OneToMany(mappedBy="voucher",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Orders> orders;
+    @OneToMany(mappedBy="voucher",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<VoucherUser> voucherUserList;
 
-    @ManyToMany
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "id_voucher"),
-            inverseJoinColumns = @JoinColumn(name = "id_user"),
-            uniqueConstraints = @UniqueConstraint(columnNames = {"id_voucher", "id_user"}))
-    private List<User> userList;
 }
