@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
-    public String username;
+    public String phone;
     private String password;
-    private String phone;
-    private String email;
 }

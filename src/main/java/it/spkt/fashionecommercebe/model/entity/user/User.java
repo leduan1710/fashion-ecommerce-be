@@ -38,20 +38,17 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(unique = true,nullable = false,columnDefinition = "nvarchar(14)")
-    private String username;
-
-    @Column(nullable = false,columnDefinition = "nvarchar(14)")
+    @Column(nullable = true)
     private String password;
 
     @Column(columnDefinition = "nvarchar(14)")
     private String name;
     private String image;
 
-    @Column(unique = true, nullable = false,columnDefinition = "nvarchar(100)")
+    @Column(unique = true, nullable = true,columnDefinition = "nvarchar(100)")
     private String email;
 
-    @Column(unique = true,nullable = false,columnDefinition = "nvarchar(14)")
+    @Column(unique = true,nullable = true,columnDefinition = "nvarchar(14)")
     private String phone;
 
     @Enumerated(EnumType.STRING)

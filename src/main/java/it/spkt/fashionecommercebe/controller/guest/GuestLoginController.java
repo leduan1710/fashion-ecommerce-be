@@ -1,5 +1,6 @@
 package it.spkt.fashionecommercebe.controller.guest;
 
+import it.spkt.fashionecommercebe.auth.AuthenticationGmailRequest;
 import it.spkt.fashionecommercebe.auth.AuthenticationRequest;
 import it.spkt.fashionecommercebe.auth.AuthenticationResponse;
 import it.spkt.fashionecommercebe.auth.RegisterRequest;
@@ -26,24 +27,54 @@ public class GuestLoginController {
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
     ){
-        if(userService.findByName(request.getUsername()).isEmpty()){
-            request.setPhone(request.getUsername());
-            return ResponseEntity.ok(authenticationService.register(request));
-        }
-        else{
-            return null;
+        AuthenticationResponse authenticationResponse = new AuthenticationResponse();
+        try{
+            if(userService.findByPhone(request.getPhone()).isEmpty()){
+                return ResponseEntity.ok(authenticationService.register(request));
+            } else{
+                authenticationResponse.setMessage("Account already exists");
+                return ResponseEntity.ok(authenticationResponse);
+            }
+        }catch(Exception e){
+            authenticationResponse.setMessage("Fail to register");
+            return ResponseEntity.ok(authenticationResponse);
         }
     }
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request
     ){
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+        AuthenticationResponse authenticationResponse=new AuthenticationResponse();
+        try{
+            return ResponseEntity.ok(authenticationService.authenticate(request));
+        }
+        catch(Exception e){
+            authenticationResponse.setMessage("Fail to login");
+            return ResponseEntity.ok(authenticationResponse);
+        }
+    }
+    @PostMapping("/login-gmail")
+    public ResponseEntity<AuthenticationResponse> authenticateGmail(
+            @RequestBody AuthenticationGmailRequest request
+    ){
+        AuthenticationResponse authenticationResponse=new AuthenticationResponse();
+        try{
+            return ResponseEntity.ok(authenticationService.authenticateGmail(request));
+        }
+        catch(Exception e){
+            authenticationResponse.setMessage("Fail to login by gmail");
+            return ResponseEntity.ok(authenticationResponse);
+        }
     }
     @PostMapping("/check")
     public Boolean check(
             @RequestBody AuthenticationRequest request
     ){
-        return authenticationService.check(request);
+        try{
+            return authenticationService.check(request);
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 }
