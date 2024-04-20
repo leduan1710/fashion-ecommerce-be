@@ -29,7 +29,7 @@ public class GuestLoginController {
     ){
         AuthenticationResponse authenticationResponse = new AuthenticationResponse();
         try{
-            if(userService.findByPhone(request.getPhone()).isEmpty()){
+            if(userService.findByUsername(request.getUsername()).isEmpty()){
                 return ResponseEntity.ok(authenticationService.register(request));
             } else{
                 authenticationResponse.setMessage("Account already exists");

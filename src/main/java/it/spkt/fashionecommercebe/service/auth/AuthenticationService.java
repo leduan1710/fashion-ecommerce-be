@@ -30,7 +30,8 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request){
         var user = User.builder()
-                .phone(request.getPhone())
+                .username(request.getUsername())
+                .phone(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .createDate(new Date())
                 .updateDate(new Date())
@@ -53,11 +54,11 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request){
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getPhone(),
+                        request.getUsername(),
                         request.getPassword()
                 )
         );
-        var user = repository.findByPhone(request.getPhone()).orElseThrow();
+        var user = repository.findByUsername(request.getUsername()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder().accessToken(jwtToken).refreshToken("refreshToken").message("Login success").build();
     }
@@ -73,7 +74,7 @@ public class AuthenticationService {
         try{
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            request.getPhone(),
+                            request.getUsername(),
                             request.getPassword()
                     )
             );

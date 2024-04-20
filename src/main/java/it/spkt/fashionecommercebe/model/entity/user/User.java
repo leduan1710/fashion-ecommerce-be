@@ -37,6 +37,8 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(unique = true,nullable = true,columnDefinition = "nvarchar(100)")
+    private String username;
 
     @Column(nullable = true)
     private String password;
@@ -138,7 +140,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return phone;
+        return username;
     }
 
     @Override
