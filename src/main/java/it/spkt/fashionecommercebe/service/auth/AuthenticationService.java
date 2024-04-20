@@ -1,6 +1,5 @@
 package it.spkt.fashionecommercebe.service.auth;
 
-import it.spkt.fashionecommercebe.API.CallApi;
 import it.spkt.fashionecommercebe.auth.AuthenticationGmailRequest;
 import it.spkt.fashionecommercebe.auth.AuthenticationRequest;
 import it.spkt.fashionecommercebe.auth.AuthenticationResponse;
@@ -28,7 +27,6 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    CallApi callApi =new CallApi();
 
     public AuthenticationResponse register(RegisterRequest request){
         var user = User.builder()

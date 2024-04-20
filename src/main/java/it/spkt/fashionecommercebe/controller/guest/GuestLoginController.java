@@ -50,6 +50,7 @@ public class GuestLoginController {
         }
         catch(Exception e){
             authenticationResponse.setMessage("Fail to login");
+            System.out.println(e.getMessage());
             return ResponseEntity.ok(authenticationResponse);
         }
     }
