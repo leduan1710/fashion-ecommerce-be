@@ -5,7 +5,10 @@ import it.spkt.fashionecommercebe.auth.AuthenticationRequest;
 import it.spkt.fashionecommercebe.auth.AuthenticationResponse;
 import it.spkt.fashionecommercebe.auth.RegisterRequest;
 import it.spkt.fashionecommercebe.common.RoleEnum;
+import it.spkt.fashionecommercebe.model.dto.user.UserInfoDTO;
 import it.spkt.fashionecommercebe.model.entity.user.User;
+import it.spkt.fashionecommercebe.repository.UserRepository;
+import it.spkt.fashionecommercebe.service.UserService;
 import it.spkt.fashionecommercebe.service.auth.AuthenticationService;
 import it.spkt.fashionecommercebe.service.auth.JwtService;
 import it.spkt.fashionecommercebe.service.impl.UserServiceImpl;
@@ -25,7 +28,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GuestLoginController {
     @Autowired
-    UserServiceImpl userService;
+    UserService userService;
+    @Autowired
+    UserRepository userRepository;
     @Autowired
     JwtService jwtService;
     private final AuthenticationService authenticationService;
@@ -83,10 +88,12 @@ public class GuestLoginController {
     public RoleEnum getRole(){
         try{
             Optional<User> user=userService.findByUsername(jwtService.extractUserName(getToken()));
+
             return user.map(User::getRole).orElse(null);
         }
         catch (Exception e){
             return null;
         }
     }
+
 }
