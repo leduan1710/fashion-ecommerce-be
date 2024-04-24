@@ -28,7 +28,7 @@ public class Category {
     @Column(nullable = false)
     private String image;
     @Column(nullable = true)
-    private int Previous;
+    private int previous;
 
     @JsonManagedReference
     @OneToMany(mappedBy="category",fetch = FetchType.LAZY,cascade= CascadeType.ALL)

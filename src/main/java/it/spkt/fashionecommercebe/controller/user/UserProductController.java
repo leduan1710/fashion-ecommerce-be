@@ -8,4 +8,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user/product")
 @CrossOrigin( origins = "*" , allowedHeaders = "*")
 public class UserProductController {
+
 }
