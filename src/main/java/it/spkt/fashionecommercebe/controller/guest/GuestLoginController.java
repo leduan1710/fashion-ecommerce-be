@@ -1,9 +1,6 @@
 package it.spkt.fashionecommercebe.controller.guest;
 
-import it.spkt.fashionecommercebe.auth.AuthenticationGmailRequest;
-import it.spkt.fashionecommercebe.auth.AuthenticationRequest;
-import it.spkt.fashionecommercebe.auth.AuthenticationResponse;
-import it.spkt.fashionecommercebe.auth.RegisterRequest;
+import it.spkt.fashionecommercebe.auth.*;
 import it.spkt.fashionecommercebe.common.RoleEnum;
 import it.spkt.fashionecommercebe.model.dto.user.UserInfoDTO;
 import it.spkt.fashionecommercebe.model.entity.user.User;
@@ -33,6 +30,8 @@ public class GuestLoginController {
     UserRepository userRepository;
     @Autowired
     JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
+
     private final AuthenticationService authenticationService;
     public String getToken(){
         return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
@@ -93,6 +92,34 @@ public class GuestLoginController {
         }
         catch (Exception e){
             return null;
+        }
+    }
+    @PostMapping("/check")
+    public Boolean Check(@RequestBody CheckUsernameRequest checkUsernameRequest){
+        try{
+            Optional<User> user=userService.findByUsername(checkUsernameRequest.getUsername());
+
+            return user.isPresent();
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+    @PostMapping("/new-password")
+    public Boolean NewPassword(@RequestBody NewPasswordRequest newPasswordRequest){
+        try{
+            Optional<User> user=userService.findByUsername(newPasswordRequest.getUsername());
+            if(user.isPresent()){
+                user.get().setPassword(passwordEncoder.encode(newPasswordRequest.getNewPassword()));
+                userService.save(user.get());
+                return true;
+            }else{
+                return false;
+            }
+
+        }
+        catch (Exception e){
+            return false;
         }
     }
 
